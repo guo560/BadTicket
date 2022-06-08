@@ -62,3 +62,5 @@ if __name__ == '__main__':
             main("周六", 1)
             break
         time.sleep(1)
+
+    browser.close()
