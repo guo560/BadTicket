@@ -92,6 +92,5 @@ def main():
 if __name__ == '__main__':
     options = Options()
     options.add_experimental_option("debuggerAddress", "127.0.0.1:9525")
-    browser = webdriver.Chrome(options=options)
-
-    main()
+    with webdriver.Chrome(options=options) as browser:
+        main()
