@@ -34,7 +34,7 @@ def main(day, time_index):
     browser.find_element_by_xpath("/html/body/div[3]/div[2]/div/div[2]/table/tbody/tr[2]/td[2]").click()  # 选择第一位同伴
     time.sleep(1)
     # 西体各个场地对应的xpath
-    xpath_dict = {1: "/html/body/div[2]/div[2]/div[2]/form/div[1]/table/tbody/tr[5]/td[4]",
+    xpath_dict = {1: "/html/body/div[2]/div[2]/div[2]/form/div[1]/table/tbody/tr[6]/td[4]",
                   2: "/html/body/div[2]/div[2]/div[2]/form/div[1]/table/tbody/tr[6]/td[5]",
                   3: "/html/body/div[2]/div[2]/div[2]/form/div[1]/table/tbody/tr[6]/td[6]",
                   4: "/html/body/div[2]/div[2]/div[2]/form/div[1]/table/tbody/tr[5]/td[6]",
@@ -53,14 +53,11 @@ def main(day, time_index):
 if __name__ == '__main__':
     options = Options()
     options.add_experimental_option("debuggerAddress", "127.0.0.1:9527")
-    browser = webdriver.Chrome(options=options)
-
-    while True:
-        now = datetime.datetime.now()
-        # 8点开抢
-        if now.hour == 8:
-            main("周六", 1)
-            break
-        time.sleep(1)
-
-    browser.close()
+    with webdriver.Chrome(options=options) as browser:
+        while True:
+            now = datetime.datetime.now()
+            # 8点开抢
+            if now.hour == 16:
+                main("周六", 1)
+                break
+            time.sleep(1)
