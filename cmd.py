@@ -7,4 +7,4 @@ def run(path, port):
 
 
 if __name__ == '__main__':
-    run("C:\Program Files\Google\Chrome\Application", 9527)
+    run("C:/Program Files/Google/Chrome/Application", 9527)
