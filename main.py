@@ -114,10 +114,12 @@ if __name__ == '__main__':
                     pass
             browser.find_element_by_xpath("/html/body/div[4]/div[2]/div[2]/ul/li[1]/a/img").click()  # 点击校内人员登陆
             browser.switch_to.window(browser.window_handles[1])  # 切换到下一个页面
-            browser.find_element_by_xpath('//*[@id="main"]/ul/li[2]/a').click()  # 点击场地预约
+            browser.find_element_by_xpath('//*[@id="main"]/ul/li[2]/a').click()  # 点击场地预约,需要登陆输入验证码时抛出异常
             main()
     except:
         with webdriver.Chrome(options=options) as browser:
+            browser.switch_to.window(browser.window_handles[1])  # 切换到下一个页面
             while browser.title != "华中科技大学体育场馆管理系统":
                 time.sleep(0.1)
+            browser.find_element_by_xpath('//*[@id="main"]/ul/li[2]/a').click()  # 点击场地预约
             main()
