@@ -1,3 +1,4 @@
+import os
 import time
 import datetime
 
@@ -5,7 +6,6 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
-from cmd import run
 
 
 def check_and_click(xpath) -> bool:
@@ -76,7 +76,7 @@ def ticket_grabbing(stadium: int, day, time_index_list: list):
 def main():
     # 相关参数设置
     # 0: "光谷体育馆", -1: "西边体育馆"
-    stadium = -1  # TODO: 记得选择场馆！！！
+    stadium = 0  # TODO: 记得选择场馆！！！
     # 0: "周一",  1: "周二",   2: "周三",  3: "周四",
     # 4: "周五",  5: "周六",   6: "周日"
     weekday = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
@@ -84,7 +84,7 @@ def main():
     # 2: 12:00 - 14:00,   3: 14:00 - 16:00
     # 4: 16:00 - 18:00,   5: 18:00 - 20:00
     # 6: 20:00 - 22:00
-    time_index_list = [4, 5, 6, 3, 1, 2]  # TODO: 记得选择时段优先级！！！
+    time_index_list = [5, 6]  # TODO: 记得选择时段优先级！！！
 
     while True:
         # 08:00 - 22:00 可抢时段
@@ -96,18 +96,28 @@ def main():
 
 
 if __name__ == '__main__':
+    url = "http://pecg.hust.edu.cn/wescms/"
     path = "C:/Program Files/Google/Chrome/Application"  # chrome.exe所在文件夹
     port = 9527
-    run(path, port)
-
     options = Options()
     options.add_experimental_option("debuggerAddress", f"127.0.0.1:{port}")
-    with webdriver.Chrome(options=options) as browser:
-        browser.find_element_by_xpath("/html/body/div[4]/div[2]/div[2]/ul/li[1]/a/img").click()  # 点击校内人员登陆
-        browser.close()
-
-    with webdriver.Chrome(options=options) as browser:
-        while browser.title != "华中科技大学体育场馆管理系统":
-            pass
-        browser.find_element_by_xpath('//*[@id="main"]/ul/li[2]/a').click()  # 点击场馆预约
-        main()
+    try:
+        os.system(f"cd {path}")
+        os.system(f"start chrome.exe --remote-debugging-port={port}")
+        with webdriver.Chrome(options=options) as browser:
+            browser.set_page_load_timeout(1)
+            while True:
+                try:
+                    browser.get(url)
+                    break
+                except:
+                    pass
+            browser.find_element_by_xpath("/html/body/div[4]/div[2]/div[2]/ul/li[1]/a/img").click()  # 点击校内人员登陆
+            browser.switch_to.window(browser.window_handles[1])  # 切换到下一个页面
+            browser.find_element_by_xpath('//*[@id="main"]/ul/li[2]/a').click()  # 点击场地预约
+            main()
+    except:
+        with webdriver.Chrome(options=options) as browser:
+            while browser.title != "华中科技大学体育场馆管理系统":
+                time.sleep(0.1)
+            main()
